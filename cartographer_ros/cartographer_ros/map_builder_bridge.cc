@@ -199,9 +199,9 @@ MapBuilderBridge::GetConstraintsList() {
     // creating points for the line strip markers
     geometry_msgs::Point submap_point, submap_pose_point, trajectory_node_point;
 
-    submap_point.x = submap_transforms[constraint.i].translation().x();
-    submap_point.y = submap_transforms[constraint.i].translation().y();
-    submap_point.z = submap_transforms[constraint.i].translation().z();
+    submap_point.x = submap_transforms[constraint.submap_id.submap_index].translation().x();
+    submap_point.y = submap_transforms[constraint.submap_id.submap_index].translation().y();
+    submap_point.z = submap_transforms[constraint.submap_id.submap_index].translation().z();
 
     trajectory_node_point.x =
         trajectory_nodes[constraint.j].pose.translation().x();
@@ -211,7 +211,7 @@ MapBuilderBridge::GetConstraintsList() {
         trajectory_nodes[constraint.j].pose.translation().z();
 
     cartographer::transform::Rigid3d residual =
-        submap_transforms[constraint.i] * constraint.pose.zbar_ij;
+        submap_transforms[constraint.submap_id.submap_index] * constraint.pose.zbar_ij;
     submap_pose_point.x = residual.translation().x();
     submap_pose_point.y = residual.translation().y();
     submap_pose_point.z = residual.translation().z();
