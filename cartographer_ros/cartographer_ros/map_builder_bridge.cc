@@ -54,8 +54,12 @@ void MapBuilderBridge::FinishTrajectory(const int trajectory_id) {
 }
 
 void MapBuilderBridge::WriteAssets(const string& stem) {
-  const auto trajectory_nodes =
-      map_builder_.sparse_pose_graph()->GetTrajectoryNodes();
+  std::vector<::cartographer::mapping::TrajectoryNode> trajectory_nodes;
+  for (const auto& single_trajectory :
+       map_builder_.sparse_pose_graph()->GetTrajectoryNodes()) {
+    trajectory_nodes.insert(trajectory_nodes.end(), single_trajectory.begin(),
+                            single_trajectory.end());
+  }
   if (trajectory_nodes.empty()) {
     LOG(WARNING) << "No data was collected and no assets will be written.";
   } else {
@@ -199,9 +203,9 @@ MapBuilderBridge::GetConstraintsList() {
     // creating points for the line strip markers
     geometry_msgs::Point submap_point, submap_pose_point, trajectory_node_point;
 
-    submap_point.x = submap_transforms[constraint.i].translation().x();
-    submap_point.y = submap_transforms[constraint.i].translation().y();
-    submap_point.z = submap_transforms[constraint.i].translation().z();
+    submap_point.x = submap_transforms[constraint.submap_id.submap_index].translation().x();
+    submap_point.y = submap_transforms[constraint.submap_id.submap_index].translation().y();
+    submap_point.z = submap_transforms[constraint.submap_id.submap_index].translation().z();
 
     trajectory_node_point.x =
         trajectory_nodes[constraint.j].pose.translation().x();
@@ -211,7 +215,7 @@ MapBuilderBridge::GetConstraintsList() {
         trajectory_nodes[constraint.j].pose.translation().z();
 
     cartographer::transform::Rigid3d residual =
-        submap_transforms[constraint.i] * constraint.pose.zbar_ij;
+        submap_transforms[constraint.submap_id.submap_index] * constraint.pose.zbar_ij;
     submap_pose_point.x = residual.translation().x();
     submap_pose_point.y = residual.translation().y();
     submap_pose_point.z = residual.translation().z();
@@ -252,8 +256,12 @@ std::unique_ptr<nav_msgs::OccupancyGrid>
 MapBuilderBridge::BuildOccupancyGrid() {
   CHECK(options_.map_builder_options.use_trajectory_builder_2d())
       << "Publishing OccupancyGrids for 3D data is not yet supported";
-  const auto trajectory_nodes =
-      map_builder_.sparse_pose_graph()->GetTrajectoryNodes();
+  std::vector<::cartographer::mapping::TrajectoryNode> trajectory_nodes;
+  for (const auto& single_trajectory :
+       map_builder_.sparse_pose_graph()->GetTrajectoryNodes()) {
+    trajectory_nodes.insert(trajectory_nodes.end(), single_trajectory.begin(),
+                            single_trajectory.end());
+  }
   std::unique_ptr<nav_msgs::OccupancyGrid> occupancy_grid;
   if (!trajectory_nodes.empty()) {
     occupancy_grid =
