@@ -55,8 +55,12 @@ void MapBuilderBridge::FinishTrajectory(const int trajectory_id) {
 }
 
 void MapBuilderBridge::WriteAssets(const string& stem) {
-  const auto trajectory_nodes =
-      map_builder_.sparse_pose_graph()->GetTrajectoryNodes();
+  std::vector<::cartographer::mapping::TrajectoryNode> trajectory_nodes;
+  for (const auto& single_trajectory :
+       map_builder_.sparse_pose_graph()->GetTrajectoryNodes()) {
+    trajectory_nodes.insert(trajectory_nodes.end(), single_trajectory.begin(),
+                            single_trajectory.end());
+  }
   if (trajectory_nodes.empty()) {
     LOG(WARNING) << "No data was collected and no assets will be written.";
   } else {
@@ -108,10 +112,10 @@ cartographer_ros_msgs::SubmapList MapBuilderBridge::GetSubmapList() {
   for (int trajectory_id = 0;
        trajectory_id < map_builder_.num_trajectory_builders();
        ++trajectory_id) {
+    const std::vector<cartographer::transform::Rigid3d> submap_transforms =
+        map_builder_.sparse_pose_graph()->GetSubmapTransforms(trajectory_id);
     const cartographer::mapping::Submaps* submaps =
         map_builder_.GetTrajectoryBuilder(trajectory_id)->submaps();
-    const std::vector<cartographer::transform::Rigid3d> submap_transforms =
-        map_builder_.sparse_pose_graph()->GetSubmapTransforms(submaps);
     CHECK_LE(submap_transforms.size(), submaps->size());
 
     cartographer_ros_msgs::TrajectorySubmapList trajectory_submap_list;
@@ -131,8 +135,12 @@ std::unique_ptr<nav_msgs::OccupancyGrid>
 MapBuilderBridge::BuildOccupancyGrid() {
   CHECK(options_.map_builder_options.use_trajectory_builder_2d())
       << "Publishing OccupancyGrids for 3D data is not yet supported";
-  const auto trajectory_nodes =
-      map_builder_.sparse_pose_graph()->GetTrajectoryNodes();
+  std::vector<::cartographer::mapping::TrajectoryNode> trajectory_nodes;
+  for (const auto& single_trajectory :
+       map_builder_.sparse_pose_graph()->GetTrajectoryNodes()) {
+    trajectory_nodes.insert(trajectory_nodes.end(), single_trajectory.begin(),
+                            single_trajectory.end());
+  }
   std::unique_ptr<nav_msgs::OccupancyGrid> occupancy_grid;
   if (!trajectory_nodes.empty()) {
     occupancy_grid =
@@ -164,7 +172,7 @@ MapBuilderBridge::GetTrajectoryStates() {
     trajectory_states[trajectory_id] = {
         pose_estimate,
         map_builder_.sparse_pose_graph()->GetLocalToGlobalTransform(
-            trajectory_builder->submaps()),
+            trajectory_id),
         sensor_bridge.tf_bridge().LookupToTracking(pose_estimate.time,
                                                    options_.published_frame)};
   }
