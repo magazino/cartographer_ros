@@ -12,49 +12,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-============================
+============
 Cartographer ROS Integration
-============================
-
-|build| |docs| |license|
-
-Purpose
-=======
-
-`Cartographer`_ is a system that provides real-time simultaneous localization
-and mapping (`SLAM`_) in 2D and 3D across multiple platforms and sensor
-configurations. This project provides Cartographer's ROS integration.
-
-.. _Cartographer: https://github.com/googlecartographer/cartographer
-.. _SLAM: https://en.wikipedia.org/wiki/Simultaneous_localization_and_mapping
-
-Getting started
-===============
-
-* Learn to use Cartographer with ROS at `our Read the Docs site`_.
-* Please join the `mailing list`_ and ask questions.
-
-.. _our Read the Docs site: https://google-cartographer-ros.readthedocs.io
-.. _mailing list: https://groups.google.com/forum/#!forum/google-cartographer
-
-Contributing
 ============
 
-You can find information about contributing to Cartographer's ROS integration
-at `our Contribution page`_.
+**Disclaimer**
 
-.. _our Contribution page: https://github.com/googlecartographer/cartographer_ros/blob/master/CONTRIBUTING.md
+This repository is only used to host branches for pull requests into Google's upstream.
 
-.. |build| image:: https://travis-ci.org/googlecartographer/cartographer_ros.svg?branch=master
-    :alt: Build Status
-    :scale: 100%
-    :target: https://travis-ci.org/googlecartographer/cartographer_ros
-.. |docs| image:: https://readthedocs.org/projects/google-cartographer-ros/badge/?version=latest
-    :alt: Documentation Status
-    :scale: 100%
-    :target: https://google-cartographer-ros.readthedocs.io/en/latest/?badge=latest
-.. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
-     :alt: Apache 2 license.
-     :scale: 100%
-     :target: https://github.com/googlecartographer/cartographer_ros/blob/master/LICENSE
+This is *not* Magazino's production fork and the master branch is not being maintained. For the latest public version of Cartographer, please head to googlecartographer_.
 
+----
+
+More information about Magazino: https://www.magazino.eu/?lang=en
+
+
+.. _googlecartographer: https://github.com/googlecartographer
