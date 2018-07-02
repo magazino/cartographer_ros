@@ -34,6 +34,10 @@ find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system iostreams)
 find_package(catkin REQUIRED COMPONENTS ${PACKAGE_DEPENDENCIES})
 
+if (${BUILD_GRPC})
+  find_package(async_grpc REQUIRED)
+endif()
+
 catkin_package(
   CATKIN_DEPENDS
     message_runtime
@@ -45,6 +49,11 @@ file(GLOB_RECURSE ALL_SRCS "*.cc" "*.h")
 set(CMAKE_AUTOMOC ON)
 add_library(${PROJECT_NAME} ${ALL_SRCS})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${QT_LIBRARIES})
+
+# async_grpc
+if(${BUILD_GRPC})
+  target_link_libraries(${PROJECT_NAME} PUBLIC async_grpc)
+endif()
 
 if(rviz_QT_VERSION VERSION_LESS "5")
   message(STATUS "Using Qt4 based on the rviz_QT_VERSION: ${rviz_QT_VERSION}")

@@ -51,6 +51,10 @@ find_package(PCL REQUIRED COMPONENTS common)
 find_package(Eigen3 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system iostreams)
 
+if (${BUILD_GRPC})
+  find_package(async_grpc REQUIRED)
+endif()
+
 find_package(urdfdom_headers REQUIRED)
 if(DEFINED urdfdom_headers_VERSION)
   if(${urdfdom_headers_VERSION} GREATER 0.4.1)
@@ -121,6 +125,11 @@ target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
   "${Boost_INCLUDE_DIRS}")
 target_link_libraries(${PROJECT_NAME} PUBLIC ${Boost_LIBRARIES})
+
+# async_grpc
+if(${BUILD_GRPC})
+  target_link_libraries(${PROJECT_NAME} PUBLIC async_grpc)
+endif()
 
 # Catkin
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${catkin_INCLUDE_DIRS})
