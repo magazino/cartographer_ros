@@ -12,5 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-std_msgs/Header header
-cartographer_ros_msgs/LandmarkEntry[] landmarks
+---
+cartographer_ros_msgs/StatusResponse status
+cartographer_ros_msgs/MetricFamily[] metric_families
+time timestamp
