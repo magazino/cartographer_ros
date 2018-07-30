@@ -15,4 +15,5 @@
 # limitations under the License.
 
 set -xe
+cd ${HOME}/.ros
 cartographer_grpc_server $@
