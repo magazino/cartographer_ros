@@ -157,6 +157,9 @@ void SubmapsDisplay::processMessage(
               id, context_, map_node_, trajectory_visibility.get(),
               trajectory_visibility->getBool(), kSubmapPoseAxesLength,
               kSubmapPoseAxesRadius));
+      if (id.trajectory_id == 0) {
+        trajectory_submaps.at(id.submap_index)->SetAlpha(0.5);
+      }
       trajectory_submaps.at(id.submap_index)
           ->SetSliceVisibility(0, slice_high_resolution_enabled_->getBool());
       trajectory_submaps.at(id.submap_index)

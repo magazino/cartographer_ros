@@ -170,6 +170,13 @@ void DrawableSubmap::SetAlpha(const double current_tracking_z,
   display_context_->queueRender();
 }
 
+void DrawableSubmap::SetAlpha(const float alpha) {
+  CHECK(0. <= alpha <= 1.);
+  for (auto& slice : ogre_slices_) {
+    slice->SetAlpha(alpha);
+  }
+}
+
 void DrawableSubmap::SetSliceVisibility(size_t slice_index, bool visible) {
   ogre_slices_.at(slice_index)->SetVisibility(visible);
   ToggleVisibility();

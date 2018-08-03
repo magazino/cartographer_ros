@@ -73,6 +73,8 @@ class DrawableSubmap : public QObject {
   // at full opacity.
   void SetAlpha(double current_tracking_z, float fade_out_distance_in_meters);
 
+  void SetAlpha(float alpha);
+
   // Sets the visibility of a slice. It will be drawn if the parent submap
   // is also visible.
   void SetSliceVisibility(size_t slice_index, bool visible);
