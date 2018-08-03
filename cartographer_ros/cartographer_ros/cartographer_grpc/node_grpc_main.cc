@@ -80,7 +80,8 @@ void Run() {
   node.RunFinalOptimization();
 
   if (!FLAGS_save_map_filename.empty()) {
-    node.SerializeState(FLAGS_save_map_filename);
+    node.SerializeState(FLAGS_save_map_filename,
+                        false /* include_unfinished_submaps */);
   }
 }
 
