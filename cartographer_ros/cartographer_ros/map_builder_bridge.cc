@@ -318,12 +318,12 @@ visualization_msgs::MarkerArray MapBuilderBridge::GetTrajectoryNodeList() {
           last_inter_trajectory_constrained_node) {
         PushAndResetLineMarker(&marker, &trajectory_node_list.markers);
         marker.points.push_back(node_point);
-        marker.color.a = 0.5;
+        marker.color.a = 1.0;
       }
       if (node_id_data.id.node_index == last_inter_submap_constrained_node) {
         PushAndResetLineMarker(&marker, &trajectory_node_list.markers);
         marker.points.push_back(node_point);
-        marker.color.a = 0.25;
+        marker.color.a = 1.0;
       }
       // Work around the 16384 point limit in RViz by splitting the
       // trajectory into multiple markers.
