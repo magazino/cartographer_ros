@@ -25,6 +25,7 @@
 #include "Eigen/Geometry"
 #include "absl/memory/memory.h"
 #include "cartographer/common/port.h"
+#include "cartographer/transform/rigid_transform.h"
 #include "cartographer_ros/msg_conversion.h"
 #include "cartographer_ros_msgs/SubmapQuery.h"
 #include "eigen_conversions/eigen_msg.h"
@@ -99,6 +100,12 @@ void DrawableSubmap::Update(
   ::cartographer::common::MutexLocker locker(&mutex_);
   metadata_version_ = metadata.submap_version;
   pose_ = ::cartographer_ros::ToRigid3d(metadata.pose);
+  if (id_.trajectory_id == 0) {
+    // Draw below.
+    auto translation = Eigen::Matrix<double, 3, 1>(
+      pose_.translation().x(), pose_.translation().y(), -0.1);
+    pose_ = ::cartographer::transform::Rigid3d(translation, pose_.rotation());
+  }
   submap_node_->setPosition(ToOgre(pose_.translation()));
   submap_node_->setOrientation(ToOgre(pose_.rotation()));
   display_context_->queueRender();

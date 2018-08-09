@@ -158,7 +158,7 @@ void SubmapsDisplay::processMessage(
               trajectory_visibility->getBool(), kSubmapPoseAxesLength,
               kSubmapPoseAxesRadius));
       if (id.trajectory_id == 0) {
-        trajectory_submaps.at(id.submap_index)->SetAlpha(0.5);
+        trajectory_submaps.at(id.submap_index)->SetAlpha(0.75);
       }
       trajectory_submaps.at(id.submap_index)
           ->SetSliceVisibility(0, slice_high_resolution_enabled_->getBool());
@@ -207,20 +207,20 @@ void SubmapsDisplay::update(const float wall_dt, const float ros_dt) {
   }
   // Update the fading by z distance.
   const ros::Time kLatest(0);
-  try {
-    const ::geometry_msgs::TransformStamped transform_stamped =
-        tf_buffer_.lookupTransform(
-            *map_frame_, tracking_frame_property_->getStdString(), kLatest);
-    for (auto& trajectory : trajectories_) {
-      for (auto& submap_entry : trajectory->submaps) {
-        submap_entry.second->SetAlpha(
-            transform_stamped.transform.translation.z,
-            fade_out_start_distance_in_meters_->getFloat());
-      }
-    }
-  } catch (const tf2::TransformException& ex) {
-    ROS_WARN_THROTTLE(1., "Could not compute submap fading: %s", ex.what());
-  }
+  // try {
+  //   const ::geometry_msgs::TransformStamped transform_stamped =
+  //       tf_buffer_.lookupTransform(
+  //           *map_frame_, tracking_frame_property_->getStdString(), kLatest);
+  //   for (auto& trajectory : trajectories_) {
+  //     for (auto& submap_entry : trajectory->submaps) {
+  //       submap_entry.second->SetAlpha(
+  //           transform_stamped.transform.translation.z,
+  //           fade_out_start_distance_in_meters_->getFloat());
+  //     }
+  //   }
+  // } catch (const tf2::TransformException& ex) {
+  //   ROS_WARN_THROTTLE(1., "Could not compute submap fading: %s", ex.what());
+  // }
   // Update the map frame to fixed frame transform.
   Ogre::Vector3 position;
   Ogre::Quaternion orientation;

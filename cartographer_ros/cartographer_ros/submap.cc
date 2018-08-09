@@ -45,7 +45,8 @@ std::unique_ptr<::cartographer::io::SubmapTextures> FetchSubmapTextures(
                                        texture.cells.end());
     response->textures.emplace_back(::cartographer::io::SubmapTexture{
         ::cartographer::io::UnpackTextureData(compressed_cells, texture.width,
-                                              texture.height),
+                                              texture.height,
+                                              submap_id.trajectory_id),
         texture.width, texture.height, texture.resolution,
         ToRigid3d(texture.slice_pose)});
   }
