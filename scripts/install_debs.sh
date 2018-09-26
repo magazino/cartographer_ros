@@ -32,6 +32,11 @@ else
   sudo apt-get install cmake -y
 fi
 
+if [[ "$(lsb_release -sc)" = "bionic" ]]
+then
+  sudo apt-get install libceres-dev -y
+fi
+
 . /opt/ros/${ROS_DISTRO}/setup.sh
 
 cd catkin_ws
