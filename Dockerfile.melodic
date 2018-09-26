@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM eu.gcr.io/cartographer-141408/cartographer_ros_melodic_base
+FROM melodic_base
+#FROM eu.gcr.io/cartographer-141408/cartographer_ros_melodic_base
 
 ARG CARTOGRAPHER_VERSION=master
 
