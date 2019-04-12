@@ -46,8 +46,10 @@ add_message_files(
 add_service_files(
   DIRECTORY srv
   FILES
+    DeleteTrajectory.srv
     FinishTrajectory.srv
     GetTrajectoryStates.srv
+    LoadStateFromFile.srv
     ReadMetrics.srv
     StartTrajectory.srv
     SubmapQuery.srv
