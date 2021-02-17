@@ -55,6 +55,12 @@ TrajectoryOptions CreateTrajectoryOptions(
   options.use_odometry = lua_parameter_dictionary->GetBool("use_odometry");
   options.use_nav_sat = lua_parameter_dictionary->GetBool("use_nav_sat");
   options.use_landmarks = lua_parameter_dictionary->GetBool("use_landmarks");
+  if (lua_parameter_dictionary->HasKey("use_fixed_frame_pose")) {
+    options.use_fixed_frame_pose =
+        lua_parameter_dictionary->GetBool("use_fixed_frame_pose");
+  } else {
+    options.use_fixed_frame_pose = false;
+  }
   options.publish_frame_projected_to_2d =
       lua_parameter_dictionary->GetBool("publish_frame_projected_to_2d");
   options.num_laser_scans =

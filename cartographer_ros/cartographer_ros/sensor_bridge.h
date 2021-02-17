@@ -27,6 +27,7 @@
 #include "cartographer/transform/transform.h"
 #include "cartographer_ros/tf_bridge.h"
 #include "cartographer_ros_msgs/LandmarkList.h"
+#include "geometry_msgs/PoseStamped.h"
 #include "geometry_msgs/Transform.h"
 #include "geometry_msgs/TransformStamped.h"
 #include "nav_msgs/OccupancyGrid.h"
@@ -59,6 +60,9 @@ class SensorBridge {
   void HandleLandmarkMessage(
       const std::string& sensor_id,
       const cartographer_ros_msgs::LandmarkList::ConstPtr& msg);
+  void HandleFixedFramePoseMessage(
+      const std::string& sensor_id,
+      const geometry_msgs::PoseStamped::ConstPtr& msg);
 
   std::unique_ptr<::cartographer::sensor::ImuData> ToImuData(
       const sensor_msgs::Imu::ConstPtr& msg);

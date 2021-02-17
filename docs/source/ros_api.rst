@@ -68,6 +68,11 @@ odom (`nav_msgs/Odometry`_)
   enabled in the :doc:`configuration`, this topic will be used as input for
   SLAM.
 
+fixed_frame_pose (`geometry_msgs/PoseStamped`_)
+  A pose estimate in the fixed frame, i.e. the map frame of the Cartographer
+  node. If *use_fixed_frame_pose* is enabled in the :doc:`configuration`, this
+  topic will be used as input for SLAM.
+
 .. TODO: add NavSatFix? Landmarks?
 
 Published Topics

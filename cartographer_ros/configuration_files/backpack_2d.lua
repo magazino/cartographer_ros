@@ -27,6 +27,7 @@ options = {
   use_pose_extrapolator = true,
   use_odometry = false,
   use_nav_sat = false,
+  use_fixed_frame_pose = false,
   use_landmarks = false,
   num_laser_scans = 0,
   num_multi_echo_laser_scans = 1,

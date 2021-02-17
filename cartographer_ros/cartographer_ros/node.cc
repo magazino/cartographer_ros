@@ -266,7 +266,8 @@ void Node::PublishLocalTrajectoryData(const ::ros::TimerEvent& timer_event) {
     // Due to 2020-07 changes to geometry2, tf buffer will issue warnings for
     // repeated transforms with the same timestamp.
     if (last_published_tf_stamps_.count(entry.first) &&
-        last_published_tf_stamps_[entry.first] == stamped_transform.header.stamp)
+        last_published_tf_stamps_[entry.first] ==
+            stamped_transform.header.stamp)
       continue;
     last_published_tf_stamps_[entry.first] = stamped_transform.header.stamp;
 
@@ -391,6 +392,11 @@ Node::ComputeExpectedSensorIds(const TrajectoryOptions& options) const {
   if (options.use_landmarks) {
     expected_topics.insert(SensorId{SensorType::LANDMARK, kLandmarkTopic});
   }
+  // Fixed frame pose is optional.
+  if (options.use_fixed_frame_pose) {
+    expected_topics.insert(
+        SensorId{SensorType::FIXED_FRAME_POSE, kFixedFramePoseTopic});
+  }
   return expected_topics;
 }
 
@@ -471,6 +477,13 @@ void Node::LaunchSubscribers(const TrajectoryOptions& options,
              &Node::HandleLandmarkMessage, trajectory_id, kLandmarkTopic,
              &node_handle_, this),
          kLandmarkTopic});
+  }
+  if (options.use_fixed_frame_pose) {
+    subscribers_[trajectory_id].push_back(
+        {SubscribeWithHandler<geometry_msgs::PoseStamped>(
+             &Node::HandleFixedFramePoseMessage, trajectory_id,
+             kFixedFramePoseTopic, &node_handle_, this),
+         kFixedFramePoseTopic});
   }
 }
 
@@ -797,6 +810,25 @@ void Node::HandleLandmarkMessage(
   }
   map_builder_bridge_.sensor_bridge(trajectory_id)
       ->HandleLandmarkMessage(sensor_id, msg);
+}
+
+void Node::HandleFixedFramePoseMessage(
+    const int trajectory_id, const std::string& sensor_id,
+    const geometry_msgs::PoseStamped::ConstPtr& msg) {
+  absl::MutexLock lock(&mutex_);
+  if (!sensor_samplers_.at(trajectory_id).fixed_frame_pose_sampler.Pulse()) {
+    return;
+  }
+  // TODO(MichaelGrupp): consider to allow passing arbitrary frame_ids and
+  // transforming them to the fixed frame here.
+  if (msg->header.frame_id != node_options_.map_frame) {
+    LOG(ERROR) << "Ignoring fixed frame pose with frame_id '"
+               << msg->header.frame_id << "', expecting '"
+               << node_options_.map_frame << "'.";
+    return;
+  }
+  map_builder_bridge_.sensor_bridge(trajectory_id)
+      ->HandleFixedFramePoseMessage(sensor_id, msg);
 }
 
 void Node::HandleImuMessage(const int trajectory_id,

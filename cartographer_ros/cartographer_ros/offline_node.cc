@@ -343,6 +343,11 @@ void RunOfflineNode(const MapBuilderFactory& map_builder_factory) {
             trajectory_id, sensor_id,
             msg.instantiate<cartographer_ros_msgs::LandmarkList>());
       }
+      if (msg.isType<geometry_msgs::PoseStamped>()) {
+        node.HandleFixedFramePoseMessage(
+            trajectory_id, sensor_id,
+            msg.instantiate<geometry_msgs::PoseStamped>());
+      }
     }
     clock.clock = msg.getTime();
     clock_publisher.publish(clock);

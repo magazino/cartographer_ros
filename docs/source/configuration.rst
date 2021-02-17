@@ -66,6 +66,13 @@ use_nav_sat
   Navigation data must be provided in this case, and the information will be
   included in the global SLAM.
 
+use_fixed_frame_pose
+  If enabled, subscribes to `geometry_msgs/PoseStamped`_ on the topic 
+  "fixed_frame_pose". The information will be included as pose estimate in the
+  global SLAM. All existing options for fixed frame poses apply here (weights,
+  sampling ratio, ...). E.g. for sparse pose input
+  `TRAJECTORY_BUILDER.collate_fixed_frame=false` makes sense.
+
 use_landmarks
   If enabled, subscribes to `cartographer_ros_msgs/LandmarkList`_ on the topic
   "landmarks".  Landmarks must be provided, as `cartographer_ros_msgs/LandmarkEntry`_ within `cartographer_ros_msgs/LandmarkList`_.  If `cartographer_ros_msgs/LandmarkEntry`_ data is provided the information
